@@ -29,7 +29,7 @@ export const EventEditForm = () => {
 
 const navigate = useNavigate()
 const {eventId} = useParams()
-const {retailOwnerId} = useParams()
+
 
 useEffect(() => {
     fetch(`http://localhost:8088/events?id=${eventId}`)
@@ -40,7 +40,7 @@ useEffect(() => {
 }, [])
 
 useEffect(() => {
-    fetch(`http://localhost:8088/retailOwners?id=${retailOwnerId}`)
+    fetch(`http://localhost:8088/retailOwners?id=${localUser.id}`)
     .then(response => response.json())
     .then((data) => {
         setEditRetailOwner(data[0])
@@ -99,7 +99,7 @@ const handleSaveButtonClick = (clickEvent) => {
                     <label htmlFor="retailName"> Retail Name: </label>
                     <input type="text" id="retailName" className="form-control"
                         placeholder="Retail name" required autoFocus 
-                        value={retailOwner.name}
+                        value={retailOwner.retailName}
                         onChange={
                             (evt) => {
                                 const copy = {...retailOwner}
@@ -219,7 +219,7 @@ const handleSaveButtonClick = (clickEvent) => {
                     <select onChange={
                             (evt) => {
                                 const copy = {...event}
-                                copy.location = evt.target.value
+                                copy.vendorLocation = evt.target.value
                                 setEditEvent(copy)
                             }
                             } >

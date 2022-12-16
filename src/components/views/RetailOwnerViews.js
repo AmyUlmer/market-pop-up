@@ -19,7 +19,6 @@ import { VendorList } from "../vendors/VendorList"
                     <Route path="/event/create" element={ <EventForm/>} />
                     <Route path="/events" element={ <EventList/>} />
                     <Route path="/events/edit/:eventId" element={ <EventEditForm/>} />
-                    <Route path="/events/edit/:retailOwnerId" element={ <EventEditForm/>} />
                 </Route>
             </Routes>
         )
