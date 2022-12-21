@@ -16,9 +16,7 @@ export const VendorViews = () => {
             }>
                 
                 <Route path="/events" element={ <EventList/>} />
-                <Route path="/vendor/list" element={ <VendorList/>} />
                 <Route path="/vendor/create" element={ <VendorForm/>} />
-                <Route path="/vendor/edit" element={ <VendorEditForm/>} />
 
                 </Route>
             </Routes>

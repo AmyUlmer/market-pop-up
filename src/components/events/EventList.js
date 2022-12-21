@@ -7,7 +7,7 @@
 //include clickable link in JSX to route to list of vendors who will be at that specific event
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export const EventList = () => {
   const [events, setEvents] = useState([]);
@@ -55,7 +55,7 @@ export const EventList = () => {
       setFiltered(events);
     } else {
       // retail owners can only see their events when logged in
-      const myEvents = events.filter((event) => event.id === localUser.id);
+      const myEvents = events.filter((event) => event.userId === localUser.id);
       setFiltered(myEvents);
     }
   }, [events]);
@@ -136,16 +136,17 @@ export const EventList = () => {
                 <p>Vendor Location:{eventObj.vendorLocation}</p>
                 </div>
         {localUser.id === eventObj.userId ? (
-          <>
+          <> 
             <button
               className="edit_button"
               onClick={() =>
-                navigate(`/events/${eventObj.id}`)
+                navigate(`/events/edit/${eventObj.id}`)
+                
               }
             >
               Edit Event
             </button>
-
+            
             {deleteButton(eventObj.id)}
           </>
         ) : (

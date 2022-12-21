@@ -21,10 +21,11 @@ export const EventForm = () => {
         name: "",
         startTime: "",
         endTime: "",
-        location: "", 
+        vendorLocation: "", 
         date: "",
         img:"",
-        userId: 0
+        userId: 0,
+        retailOwnerId:0
     })
 
     const localMarketUser = localStorage.getItem("market_user")
@@ -66,9 +67,10 @@ useEffect(
         startTime: events.startTime,
         endTime: events.endTime,
         date: events.date,
-        location: events.location,
-        img: events.img, 
+        vendorLocation: events.vendorLocation,
+        img: "", 
         userId: localUser.id
+        // retailOwnerId: events.retailOwnerId
     }
 
     const ownerInfoToSendToAPI = {
@@ -81,27 +83,38 @@ useEffect(
     }
     // TODO: Perform the fetch() to POST the object to the API
 
-    return fetch(`http://localhost:8088/events`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(eventInfoToSendToAPI)
-    })
-        .then(response => response.json())
-        .then (() => {
-            return fetch(`http://localhost:8088/retailOwners`, {
+     fetch(`http://localhost:8088/retailOwners`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(ownerInfoToSendToAPI)
     })
-        })
+        .then(response => response.json())
+        .then ((createdRetailOwner) => {
+            if (createdRetailOwner.hasOwnProperty("id")){
+            fetch(`http://localhost:8088/events`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({retailOwnerId: createdRetailOwner.id})
+    })
+    .then(response => response.json())
+    .then ((createdEvent) => {
+        if (createdEvent.hasOwnProperty("id")) {
+            fetch (`http://localhost:8088/events/${createdEvent.id}`, {
+                method: "PATCH",
+                headers: {
+                     "Content-Type": "application/json"
+        },
+        body: JSON.stringify(eventInfoToSendToAPI)
+    })
+            .then(response => response.json())
         .then(() => {
             navigate("/events")
         })
-    }
+    } })}})}
     
 
 
@@ -149,6 +162,21 @@ useEffect(
                             (evt) => {
                                 const copy = {...retailOwners}
                                 copy.city = evt.target.value
+                                updateRetailOwners(copy)
+                            }
+                        } />
+                        </div>
+                </fieldset>
+                <fieldset>
+                <div className="form-group">
+                    <label htmlFor="state"> State </label>
+                    <input type="state" id="state" className="form-control"
+                        placeholder="State" required 
+                        value={retailOwners.state}
+                        onChange={
+                            (evt) => {
+                                const copy = {...retailOwners}
+                                copy.state = evt.target.value
                                 updateRetailOwners(copy)
                             }
                         } />
@@ -230,11 +258,11 @@ useEffect(
                     </div>
                 </fieldset>
                 <fieldset>
-                    <label htmlFor="location"> Location </label><br></br>
+                    <label htmlFor="vendorLocation"> Vendor Location </label><br></br>
                     <select onChange={
                             (evt) => {
                                 const copy = {...events}
-                                copy.location = evt.target.value
+                                copy.vendorLocation = evt.target.value
                                 updateEvents(copy)
                             }
                             } >

@@ -11,10 +11,11 @@ export const EventEditForm = () => {
         name: "",
         startTime: "",
         endTime: "",
-        location: "", 
+        vendorLocation: "", 
         date: "",
         img:"",
-        userId: localUser.id
+        userId: localUser.id,
+        retailOwnerId: 0
     })
 
     const [retailOwner, setEditRetailOwner] = useState({
@@ -144,11 +145,26 @@ const handleSaveButtonClick = (clickEvent) => {
                     <label htmlFor="state"> State: </label>
                     <input type="state" id="state" className="form-control"
                         placeholder="State" required 
-                        value={retailOwner.city}
+                        value={retailOwner.state}
                         onChange={
                             (evt) => {
                                 const copy = {...retailOwner}
-                                copy.city = evt.target.value
+                                copy.state = evt.target.value
+                                setEditRetailOwner(copy)
+                            }
+                        } />
+                        </div>
+                </fieldset>
+                <fieldset>
+                <div className="form-group">
+                    <label htmlFor="zipCode"> Zip Code: </label>
+                    <input type="zipCode" id="zipCode" className="form-control"
+                        placeholder="zipCode" required 
+                        value={retailOwner.zipCode}
+                        onChange={
+                            (evt) => {
+                                const copy = {...retailOwner}
+                                copy.zipCode = evt.target.value
                                 setEditRetailOwner(copy)
                             }
                         } />
